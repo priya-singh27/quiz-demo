@@ -1,0 +1,64 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Python
+*.egg
+*.egg-info/
+dist/
+build/
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Static/media files (optional, if auto-generated)
+staticfiles/
+media/
+
+# Database files (optional)
+*.sqlite3
+
+# Coverage / testing
+htmlcov/
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Mypy, Pylint, Bandit, etc.
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Gunicorn / Uvicorn reload files
+*.pid
+
+# AWS or cloud credentials (if accidentally generated)
+.aws/
+
+# pip-tools
+*.txt~  # e.g., requirements.txt~ (temp files)
