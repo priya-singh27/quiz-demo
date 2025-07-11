@@ -13,6 +13,7 @@ from schemas import (
     MultipleChoiceData, TrueFalseData, FillInBlanksData, MatchFollowingData
 )
 
+# fun, new,
 logger = logging.getLogger(__name__)
 
 # Initialize OpenAI client
