@@ -553,8 +553,8 @@
         let timerInterval = null;
         let selectedMatchItems = { left: null, right: null };
         let matchConnections = {};
+        let quizInProgress = false;
 
-        // Wait for DOM to load before setting up event listeners
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎬 Initializing quiz application...');
             
@@ -634,33 +634,65 @@
         }
 
         async function startQuiz() {
+            console.log('🚀 START - startQuiz function called');
+            
             try {
+                console.log('🎯 STEP 1 - Getting form data');
                 const formData = getFormData();
+                console.log('📋 Form data:', formData);
                 
+                console.log('🎯 STEP 2 - Validating form data');
                 if (!validateFormData(formData)) {
+                    console.log('❌ Validation failed, returning early');
                     return;
                 }
+                console.log('✅ Validation passed');
 
+                console.log('🎯 STEP 3 - Showing loading state');
                 showLoadingState();
+                console.log('✅ Loading state shown');
                 
+                console.log('🎯 STEP 4 - About to make API call');
                 const questions = await fetchQuestions(formData);
+                console.log('✅ API call completed, questions received:', questions.length);
                 
+                console.log('🎯 STEP 5 - Initializing quiz data');
                 initializeQuizData(questions);
+                console.log('✅ Quiz data initialized');
                 
-                // Add delay for smooth transition
-                setTimeout(() => {
-                    showQuizInterface();
-                    displayQuestion();
-                    startTimer();
-                    quizInProgress = true; // Mark quiz as active
-                }, 300);
+                // REMOVE SETTIMEOUT - Execute immediately
+                console.log('🎯 STEP 6 - Showing quiz interface immediately');
+                
+                console.log('🎮 Calling showQuizInterface...');
+                showQuizInterface();
+                console.log('✅ showQuizInterface completed');
+                
+                console.log('📝 Calling displayQuestion...');
+                displayQuestion();
+                console.log('✅ displayQuestion completed');
+                
+                console.log('⏱️ Calling startTimer...');
+                startTimer();
+                console.log('✅ startTimer completed');
+                
+                console.log('🏁 Setting quizInProgress = true');
+                quizInProgress = true;
+                
+                console.log('🎉 SUCCESS - Quiz should now be visible!');
+                console.log('👁️ Final state check:');
+                console.log('- quizSetup display:', document.getElementById('quizSetup').style.display);
+                console.log('- loading display:', document.getElementById('loading').style.display);
+                console.log('- quizInterface display:', document.getElementById('quizInterface').style.display);
 
             } catch (error) {
-                console.error('💥 Quiz loading error:', error);
+                console.error('💥 ERROR in startQuiz:', error);
+                console.error('💥 Error stack:', error.stack);
                 showError('Error loading quiz: ' + error.message);
             }
+            
+            console.log('🏁 END - startQuiz function completed');
         }
-
+       
         function getFormData() {
             return {
                 subject: document.getElementById('subject').value,
@@ -730,25 +762,86 @@
         }
 
         function showQuizInterface() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('quizInterface').style.display = 'block';
-        }
-
-        function displayQuestion() {
-            try {
-                const question = currentQuestions[currentQuestionIndex];
+            console.log('🎮 showQuizInterface() called');
+            
+            const loadingDiv = document.getElementById('loading');
+            const quizInterface = document.getElementById('quizInterface');
+            const quizSetup = document.getElementById('quizSetup');
+            
+            console.log('📦 Loading element found:', !!loadingDiv);
+            console.log('🎯 Quiz interface element found:', !!quizInterface);
+            console.log('⚙️ Quiz setup element found:', !!quizSetup);
+            
+            if (loadingDiv) {
+                loadingDiv.style.display = 'none';
+                console.log('✅ Loading hidden - display:', loadingDiv.style.display);
+            } else {
+                console.error('❌ Loading element not found!');
+            }
+            
+            if (quizSetup) {
+                quizSetup.style.display = 'none';
+                console.log('✅ Quiz setup hidden - display:', quizSetup.style.display);
+            } else {
+                console.error('❌ Quiz setup element not found!');
+            }
+            
+            if (quizInterface) {
+                quizInterface.style.display = 'block';
+                console.log('✅ Quiz interface shown - display:', quizInterface.style.display);
                 
-                updateQuizProgress();
-                updateQuestionDisplay(question);
-                renderQuestionOptions(question);
-                updateNavigationButtons();
-
-            } catch (error) {
-                console.error('💥 Error displaying question:', error);
-                showError('Error displaying question: ' + error.message);
+                // Double-check it's actually visible
+                const computedStyle = window.getComputedStyle(quizInterface);
+                console.log('🔍 Computed display style:', computedStyle.display);
+                console.log('🔍 Computed visibility:', computedStyle.visibility);
+            } else {
+                console.error('❌ Quiz interface element not found!');
             }
         }
 
+        function displayQuestion() {
+            console.log('📝 displayQuestion() called');
+            console.log('📊 Current question index:', currentQuestionIndex);
+            console.log('📚 Total questions:', currentQuestions.length);
+            
+            if (!currentQuestions || currentQuestions.length === 0) {
+                console.error('❌ No questions available!');
+                return;
+            }
+            
+            if (currentQuestionIndex >= currentQuestions.length) {
+                console.error('❌ Question index out of bounds!');
+                return;
+            }
+            
+            try {
+                const question = currentQuestions[currentQuestionIndex];
+                console.log('📋 Current question:', question);
+                
+                console.log('🔄 Updating quiz progress...');
+                updateQuizProgress();
+                console.log('✅ Quiz progress updated');
+                
+                console.log('🔄 Updating question display...');
+                updateQuestionDisplay(question);
+                console.log('✅ Question display updated');
+                
+                console.log('🔄 Rendering question options...');
+                renderQuestionOptions(question);
+                console.log('✅ Question options rendered');
+                
+                console.log('🔄 Updating navigation buttons...');
+                updateNavigationButtons();
+                console.log('✅ Navigation buttons updated');
+                
+                console.log('✅ displayQuestion completed successfully');
+
+            } catch (error) {
+                console.error('💥 Error in displayQuestion:', error);
+                console.error('💥 Error stack:', error.stack);
+            }
+        }
+        
         function updateQuizProgress() {
             document.getElementById('quizProgress').textContent = 
                 `Question ${currentQuestionIndex + 1} of ${currentQuestions.length}`;
@@ -1116,27 +1209,7 @@
             document.getElementById('errorDiv').textContent = message;
         }
 
-        // Additional safeguards - Only activate during active quiz
-        let quizInProgress = false;
         
-        window.addEventListener('beforeunload', function(event) {
-            // Only show warning if quiz is actually in progress and user is partway through
-            if (quizInProgress && currentQuestions.length > 0 && currentQuestionIndex > 0 && currentQuestionIndex < currentQuestions.length - 1) {
-                console.log('⚠️ Page unload detected during active quiz');
-                event.preventDefault();
-                event.returnValue = 'Are you sure you want to leave? Your quiz progress will be lost.';
-                return event.returnValue;
-            }
-        });
-
-        window.addEventListener('popstate', function(event) {
-            if (quizInProgress && currentQuestions.length > 0) {
-                console.log('⚠️ Browser navigation detected during quiz');
-                event.preventDefault();
-                history.pushState(null, null, window.location.href);
-            }
-        });
-
         console.log('🎬 Quiz application loaded successfully');
     </script>
 </body>
